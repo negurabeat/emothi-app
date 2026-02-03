@@ -171,134 +171,26 @@
         @keyframes sparkle { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px #fff); } 50% { opacity: 0.7; filter: drop-shadow(0 0 8px #a855f7); } }
         
         /* 広告スペース（地層風） */
-        .stratum-container {
-            width: 100%;
-            /* max-width: 320px; を削除して親要素(max-w-md)に合わせる */
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .stratum-layer {
-            width: 100%;
-            height: 40px; /* 各枠の高さ */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px; /* 10px -> 12px */
-            font-weight: bold;
-            transition: background-color 0.2s;
-            cursor: pointer;
-        }
-
-        /* 1層目（浅い層） */
-        .layer-1 {
-            background-color: #292524; /* stone-800 */
-            border: 1px dashed #44403c;
-            border-bottom: none;
-            color: #a8a29e;
-            border-radius: 4px 4px 0 0;
-        }
+        .stratum-container { width: 100%; max-width: 320px; margin: 0 auto; display: flex; flex-direction: column; }
+        .stratum-layer { width: 100%; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; transition: background-color 0.2s; cursor: pointer; }
+        .layer-1 { background-color: #292524; border: 1px dashed #44403c; border-bottom: none; color: #a8a29e; border-radius: 4px 4px 0 0; }
         .layer-1:hover { background-color: #363230; }
-
-        /* 2層目（深い層） */
-        .layer-2 {
-            background-color: #1c1917; /* stone-900 */
-            border: 1px dashed #292524;
-            color: #78716c;
-        }
+        .layer-2 { background-color: #1c1917; border: 1px dashed #292524; color: #78716c; }
         .layer-2:hover { background-color: #262220; }
-        
-        /* コンテンツ地層（さらに深い層） */
-        .layer-content {
-            background-color: #0c0a09; /* stone-950 */
-            border-left: 1px solid #1c1917;
-            border-right: 1px solid #1c1917;
-            border-bottom: 1px solid #1c1917;
-            color: #d6d3d1; 
-            padding: 24px;
-            font-size: 14px; /* 13px -> 14px */
-            line-height: 1.8;
-            text-align: left;
-            border-radius: 0 0 4px 4px;
-        }
-        
-        .layer-content h3 {
-            color: #f5f5f4;
-            font-weight: bold;
-            font-size: 16px; /* 15px -> 16px */
-            margin-top: 16px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #44403c;
-            padding-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .layer-content { background-color: #0c0a09; border-left: 1px solid #1c1917; border-right: 1px solid #1c1917; border-bottom: 1px solid #1c1917; color: #d6d3d1; padding: 24px; font-size: 14px; line-height: 1.8; text-align: left; border-radius: 0 0 4px 4px; }
+        .layer-content h3 { color: #f5f5f4; font-weight: bold; font-size: 16px; margin-top: 16px; margin-bottom: 10px; border-bottom: 1px solid #44403c; padding-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .layer-content p { margin-bottom: 16px; }
+        .layer-content strong { color: #ffffff; }
+        .ground-line { width: 80%; height: 2px; background-color: #44403c; margin: 0 auto 2px auto; border-radius: 2px; opacity: 0.5; }
 
-        .layer-content p {
-            margin-bottom: 16px;
-        }
-        
-        .layer-content strong {
-            color: #ffffff;
-        }
-
-        /* 地面ライン */
-        .ground-line {
-            width: 80%;
-            height: 2px;
-            background-color: #44403c;
-            margin: 0 auto 2px auto;
-            border-radius: 2px;
-            opacity: 0.5;
-        }
-
-        /* --- 棒人間の歩行アニメーション --- */
-        @keyframes walk-body {
-            0%, 100% { transform: translateX(0) rotate(0deg); }
-            25% { transform: translateX(5px) rotate(2deg); }
-            75% { transform: translateX(-5px) rotate(-2deg); }
-        }
-        /* SVG内の足用クラス */
-        .leg-left-anim {
-            animation: leg-swing 1s infinite alternate ease-in-out;
-            transform-origin: 50px 80px; /* 股関節 */
-        }
-        .leg-right-anim {
-            animation: leg-swing 1s infinite alternate-reverse ease-in-out;
-            transform-origin: 50px 80px;
-        }
-        @keyframes leg-swing {
-            from { transform: rotate(-15deg); }
-            to { transform: rotate(15deg); }
-        }
-        
-        /* 全体が左右に歩くコンテナ */
-        .walker-container {
-            width: 40px; /* 基準幅を固定して吹き出しの位置計算を安定させる */
-            animation: wander 10s infinite ease-in-out;
-        }
-        @keyframes wander {
-            0%, 100% { transform: translateX(0); }
-            30% { transform: translateX(20px); }
-            70% { transform: translateX(-20px); }
-        }
-
-        /* --- 感情オーラ（パーティクル） --- */
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            opacity: 0.6;
-            pointer-events: none;
-            animation: floatUp 3s linear infinite;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 0.6; }
-            100% { transform: translateY(-40px) scale(0); opacity: 0; }
-        }
+        /* アニメーション */
+        .leg-left-anim { animation: leg-swing 1s infinite alternate ease-in-out; transform-origin: 50px 80px; }
+        .leg-right-anim { animation: leg-swing 1s infinite alternate-reverse ease-in-out; transform-origin: 50px 80px; }
+        @keyframes leg-swing { from { transform: rotate(-15deg); } to { transform: rotate(15deg); } }
+        .walker-container { width: 40px; animation: wander 10s infinite ease-in-out; }
+        @keyframes wander { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(20px); } 70% { transform: translateX(-20px); } }
+        .particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; opacity: 0.6; pointer-events: none; animation: floatUp 3s linear infinite; }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0.6; } 100% { transform: translateY(-40px) scale(0); opacity: 0; } }
 
         #share-modal { transition: opacity 0.3s ease; }
     </style>
@@ -308,7 +200,6 @@
     <!-- メインコンテンツラッパー -->
     <div id="capture-area" class="flex flex-col justify-between min-h-[calc(100dvh-60px)] bg-[#121212]">
 
-        <!-- ヘッダー -->
         <header class="flex-none w-full max-w-md mx-auto flex justify-between items-center mb-0.5">
             <div class="flex flex-col">
                 <h1 class="text-xl font-bold tracking-wider text-gray-300 font-[Inter] leading-none">EMOTHI</h1>
@@ -320,13 +211,11 @@
             </div>
         </header>
 
-        <!-- メッセージエリア -->
         <div class="flex-none text-center -mb-1 z-10 relative">
             <p class="text-sm text-gray-400 font-bold">今のあなたの気持ちを押してみよう。</p>
             <p class="text-xs text-gray-600 font-[Inter] transform scale-90">Press your current feeling.</p>
         </div>
 
-        <!-- メインスイッチエリア -->
         <main class="flex-none flex items-center justify-center w-full max-w-md mx-auto py-1">
             <div class="grid grid-cols-2 gap-1.5 w-full aspect-square max-h-[30vh]">
                 <button id="btn-joy" onclick="handlePress('joy')" class="emotion-btn bg-[#FFD700] text-black rounded-2xl shadow-md group flex flex-col items-center justify-center">
@@ -348,7 +237,6 @@
             </div>
         </main>
 
-        <!-- 集計エリア -->
         <section class="flex-none w-full max-w-md mx-auto bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 shadow-xl overflow-hidden mb-1 mt-2">
             <div class="flex text-xs font-bold text-center bg-gray-900/50">
                 <button onclick="switchTab('world_1h')" id="tab-world-1h" class="flex-1 py-2 tab-active transition-colors leading-tight">
@@ -382,106 +270,53 @@
             </div>
         </section>
 
-        <!-- SNSシェア (2段組み: テキスト + 画像) -->
         <div id="share-buttons-area" class="flex-none w-full max-w-md mx-auto mb-2 px-2 flex flex-col gap-2">
-            <!-- テキスト系シェア -->
             <div class="flex gap-2 justify-center w-full">
                 <button onclick="shareTo('x')" class="flex-1 bg-black border border-gray-700 hover:bg-gray-900 text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span class="text-sm font-[Inter]">Post</span></button>
                 <button onclick="shareTo('line')" class="flex-1 bg-[#06C755] hover:bg-[#05b34c] text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5"><span class="text-sm font-[Inter]">LINE</span></button>
                 <button onclick="shareTo('threads')" class="flex-1 bg-[#1a1a1a] border border-gray-600 hover:bg-gray-800 text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5"><span class="text-sm font-[Inter]">Threads</span></button>
             </div>
-            <!-- 画像系シェア -->
             <div class="flex gap-2 justify-center w-full">
                 <button onclick="handleImageShare('instagram')" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5 shadow-md"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg><span class="text-sm font-[Inter]">Insta</span></button>
                 <button onclick="handleImageShare('tiktok')" class="flex-1 bg-[#111] border border-gray-700 hover:bg-black text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5 shadow-md"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg><span class="text-sm font-[Inter]">TikTok</span></button>
             </div>
         </div>
 
-        <!-- 棒人間エリア -->
         <div class="flex-grow w-full max-w-md mx-auto flex items-end justify-center mb-0 px-4 relative min-h-[100px]">
-            <!-- AIメッセージ生成ボタン (位置: bottom-2) -->
-            <button onclick="generateAiMessage()" id="ai-btn" class="absolute bottom-2 right-2 bg-gray-800 border border-gray-600 rounded-full px-3 py-1.5 flex items-center gap-1 text-xs text-white hover:bg-gray-700 transition-colors z-20 shadow-sm">
-                <span class="ai-sparkle">✨</span>言葉をもらう
-            </button>
-
-            <!-- 感情オーラ（パーティクル）コンテナ -->
+            <button onclick="generateAiMessage()" id="ai-btn" class="absolute bottom-2 right-2 bg-gray-800 border border-gray-600 rounded-full px-3 py-1.5 flex items-center gap-1 text-xs text-white hover:bg-gray-700 transition-colors z-20 shadow-sm"><span class="ai-sparkle">✨</span>言葉をもらう</button>
             <div id="particles-container" class="absolute inset-0 pointer-events-none z-0"></div>
-
-            <!-- 棒人間SVG (歩くアニメーション用コンテナ内、relativeを追加して吹き出しの親に) -->
             <div class="walker-container z-10 relative">
-                
-                <!-- 吹き出し (walker-containerの中に移動) -->
-                <!-- クラス: bubble-tail を追加してCSSで制御 -->
+                <!-- クラス: bubble-base を使用 -->
                 <div id="bubble-container" class="bubble-base"><span id="stick-message">Touch my heart...</span></div>
-
                 <svg id="stick-figure" width="40" height="40" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="mb-1">
                     <line x1="50" y1="50" x2="50" y2="80" />
-                    <!-- 足 (アニメーション用に分離) -->
                     <line id="leg-left" x1="50" y1="80" x2="30" y2="100" class="leg-left-anim" />
                     <line id="leg-right" x1="50" y1="80" x2="70" y2="100" class="leg-right-anim" />
                     <circle cx="50" cy="30" r="20" />
-                    <g id="face-content">
-                        <circle cx="43" cy="25" r="2" fill="white" stroke="none"/>
-                        <circle cx="57" cy="25" r="2" fill="white" stroke="none"/>
-                        <path d="M45 35 Q50 38 55 35" />
-                    </g>
-                    <g id="arms">
-                        <line x1="50" y1="60" x2="30" y2="70" />
-                        <line x1="50" y1="60" x2="70" y2="70" />
-                    </g>
+                    <g id="face-content"><circle cx="43" cy="25" r="2" fill="white" stroke="none"/><circle cx="57" cy="25" r="2" fill="white" stroke="none"/><path d="M45 35 Q50 38 55 35" /></g>
+                    <g id="arms"><line x1="50" y1="60" x2="30" y2="70" /><line x1="50" y1="60" x2="70" y2="70" /></g>
                 </svg>
             </div>
         </div>
 
-        <!-- フッター（SNS以外） -->
         <footer class="flex-none w-full max-w-md mx-auto flex gap-2 justify-center mb-0"></footer>
 
-    </div><!-- End of Main Wrapper -->
+    </div>
 
-    <!-- 地層エリア (広告 & コンテンツ) -->
+    <!-- 地層エリア -->
     <div class="stratum-container flex-none w-full max-w-md mx-auto">
         <div class="ground-line"></div>
-        
-        <!-- 広告枠（浅い層） -->
-        <div class="stratum-layer ad-layer layer-1">
-            広告募集中 (AD 1)
-        </div>
-        <div class="stratum-layer ad-layer layer-2">
-            広告募集中 (AD 2)
-        </div>
-
-        <!-- コンテンツ地層（深い層） -->
+        <div class="stratum-layer ad-layer layer-1">広告募集中 (AD 1)</div>
+        <div class="stratum-layer ad-layer layer-2">広告募集中 (AD 2)</div>
         <div class="layer-content">
              <h3>📜 EMOTHI 開発ストーリー</h3>
-             <p>
-                 このアプリは、「誰にも言えない感情を、空に向かって放り投げたい」という小さな願いから生まれました。
-                 嬉しいこと、腹が立つこと、悲しいこと。SNSに書くほどでもないけれど、誰かに知ってほしい気持ち。
-                 そんな感情を「スイッチ」として可視化し、世界中の誰かと「今、同じ感情を持っている」という繋がりを感じられたら、少しだけ救われるかもしれない。
-             </p>
-             <p>
-                 キャラクターの「エモッチ」は、そんなあなたの感情の番人です。
-                 彼は言葉を持ちませんが（AIの力で少し喋りますが）、あなたの感情に合わせて表情を変え、時には一緒に喜び、時には悲しんでくれます。
-             </p>
-             <p>
-                 <strong>開発コンセプト:</strong> 「人を気にかけるきっかけになるツール」。
-                 自分の感情を見つめ直すだけでなく、世界のどこかで誰かが泣いていること、笑っていることに思いを馳せる時間を、この小さな画面の中で過ごしていただければ幸いです。
-             </p>
-
+             <p>このアプリは、「誰にも言えない感情を、空に向かって放り投げたい」という小さな願いから生まれました。嬉しいこと、腹が立つこと、悲しいこと。SNSに書くほどでもないけれど、誰かに知ってほしい気持ち。そんな感情を「スイッチ」として可視化し、世界中の誰かと「今、同じ感情を持っている」という繋がりを感じられたら、少しだけ救われるかもしれない。</p>
+             <p>キャラクターの「エモッチ」は、そんなあなたの感情の番人です。彼は言葉を持ちませんが（AIの力で少し喋りますが）、あなたの感情に合わせて表情を変え、時には一緒に喜び、時には悲しんでくれます。</p>
+             <p><strong>開発コンセプト:</strong> 「人を気にかけるきっかけになるツール」。自分の感情を見つめ直すだけでなく、世界のどこかで誰かが泣いていること、笑っていることに思いを馳せる時間を、この小さな画面の中で過ごしていただければ幸いです。</p>
              <h3>💡 エモッチの使い方</h3>
-             <p>
-                 1. <strong>感情ボタンを押す:</strong> 今の気持ちに近いボタンを押してください。<br>
-                 2. <strong>エモッチの変化:</strong> あなたの感情に合わせてエモッチが動いたり、言葉をかけてくれます。<br>
-                 3. <strong>世界とつながる:</strong> 「せかい」タブで、今この瞬間に世界中で押された感情が見えます。<br>
-                 4. <strong>シェアする:</strong> SNSで今の感情バランスをシェアできます。エモッチの言葉も一緒に投稿されます。
-             </p>
-
+             <p>1. <strong>感情ボタンを押す:</strong> 今の気持ちに近いボタンを押してください。<br>2. <strong>エモッチの変化:</strong> あなたの感情に合わせてエモッチが動いたり、言葉をかけてくれます。<br>3. <strong>世界とつながる:</strong> 「せかい」タブで、今この瞬間に世界中で押された感情が見えます。<br>4. <strong>シェアする:</strong> SNSで今の感情バランスをシェアできます。エモッチの言葉も一緒に投稿されます。</p>
              <h3>🧠 感情についてのコラム</h3>
-             <p>
-                 「喜怒哀楽」という言葉がありますが、人間の感情はもっと複雑です。
-                 「怒り」の裏には「悲しみ」が隠れていることもありますし、「楽」の中に「虚しさ」があることもあります。
-                 EMOTHIではあえて4つのシンプルな感情に絞っていますが、ボタンを連打することでその「強さ」や「混ざり具合」を表現してみてください。
-                 言葉にならないモヤモヤを、指先から外に逃がしてあげる。それだけで、心のデトックスになるかもしれません。
-             </p>
+             <p>「喜怒哀楽」という言葉がありますが、人間の感情はもっと複雑です。「怒り」の裏には「悲しみ」が隠れていることもありますし、「楽」の中に「虚しさ」があることもあります。EMOTHIではあえて4つのシンプルな感情に絞っていますが、ボタンを連打することでその「強さ」や「混ざり具合」を表現してみてください。言葉にならないモヤモヤを、指先から外に逃がしてあげる。それだけで、心のデトックスになるかもしれません。</p>
         </div>
     </div>
 
@@ -867,6 +702,7 @@
         async function callGemini(prompt) {
             const keyToUse = (typeof __firebase_config !== 'undefined') ? "" : apiKey;
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${keyToUse}`;
+            
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
             for (let i = 0; i < 5; i++) { // リトライ回数を5回に戻す
                 try {
