@@ -22,7 +22,6 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            /* justify-content: space-between; を削除して自然な積み上げにする */
         }
 
         /* --- 光るエフェクト --- */
@@ -94,7 +93,7 @@
             border-bottom: 2px solid transparent;
         }
 
-        /* --- 吹き出しスタイル --- */
+        /* --- 吹き出しスタイル（修正版: 横長・安定型） --- */
         .bubble-base {
             position: absolute;
             background-color: white;
@@ -192,52 +191,85 @@
         @keyframes wander { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(20px); } 70% { transform: translateX(-20px); } }
         .particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; opacity: 0.6; pointer-events: none; animation: floatUp 3s linear infinite; }
         @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0.6; } 100% { transform: translateY(-40px) scale(0); opacity: 0; } }
-
-        #share-modal { transition: opacity 0.3s ease; }
     </style>
 </head>
 <body class="px-1 py-2 safe-area-pb">
 
-    <!-- メインコンテンツラッパー -->
-    <div id="capture-area" class="flex flex-col justify-between min-h-[calc(100dvh-60px)] bg-[#121212]">
+    <!-- メインコンテンツラッパー: 画面高さから広告1.5層分(60px)を引いた高さを確保 -->
+    <div class="flex flex-col justify-between min-h-[calc(100dvh-60px)]">
 
+        <!-- ヘッダー (極小) -->
         <header class="flex-none w-full max-w-md mx-auto flex justify-between items-center mb-0.5">
             <div class="flex flex-col">
                 <h1 class="text-xl font-bold tracking-wider text-gray-300 font-[Inter] leading-none">EMOTHI</h1>
                 <span class="text-xs text-gray-500 tracking-wider font-bold mt-0.5">エモッチ</span>
             </div>
-            <div id="header-status" class="text-xs text-gray-500 border border-gray-700 px-2 py-0.5 rounded-full flex items-center">
+            <div class="text-xs text-gray-500 border border-gray-700 px-2 py-0.5 rounded-full flex items-center">
                 <span id="connection-status" class="w-2 h-2 inline-block bg-yellow-500 rounded-full mr-1.5"></span>
                 <span id="connection-text" class="font-[Inter]">CONNECTING</span>
             </div>
         </header>
 
+        <!-- メッセージエリア -->
         <div class="flex-none text-center -mb-1 z-10 relative">
             <p class="text-sm text-gray-400 font-bold">今のあなたの気持ちを押してみよう。</p>
             <p class="text-xs text-gray-600 font-[Inter] transform scale-90">Press your current feeling.</p>
         </div>
 
+        <!-- メインスイッチエリア -->
         <main class="flex-none flex items-center justify-center w-full max-w-md mx-auto py-1">
             <div class="grid grid-cols-2 gap-1.5 w-full aspect-square max-h-[30vh]">
-                <button id="btn-joy" onclick="handlePress('joy')" class="emotion-btn bg-[#FFD700] text-black rounded-2xl shadow-md group flex flex-col items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
-                    <span class="text-2xl font-black mb-0.5 z-10">喜</span><span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">ヨロコビ</span><span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">JOY</span>
+                <!-- 喜 JOY -->
+                <button id="btn-joy" onclick="handlePress('joy')" 
+                    class="emotion-btn bg-[#FFD700] text-black rounded-2xl shadow-md group flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform">
+                        <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>
+                    </svg>
+                    <span class="text-2xl font-black mb-0.5 z-10">喜</span>
+                    <span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">ヨロコビ</span>
+                    <span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">JOY</span>
                 </button>
-                <button id="btn-anger" onclick="handlePress('anger')" class="emotion-btn bg-red-600 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
-                    <span class="text-2xl font-black mb-0.5 z-10">怒</span><span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">イカリ</span><span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">ANGER</span>
+
+                <!-- 怒 ANGER -->
+                <button id="btn-anger" onclick="handlePress('anger')" 
+                    class="emotion-btn bg-red-600 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform">
+                        <circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>
+                    </svg>
+                    <span class="text-2xl font-black mb-0.5 z-10">怒</span>
+                    <span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">イカリ</span>
+                    <span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">ANGER</span>
                 </button>
-                <button id="btn-sorrow" onclick="handlePress('sorrow')" class="emotion-btn bg-blue-600 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M7.5 11h3"/><path d="M9 11v3"/><path d="M13.5 11h3"/><path d="M15 11v3"/><path d="M9 18c1.5-1 4.5-1 6 0"/></svg>
-                    <span class="text-2xl font-black mb-0.5 z-10">哀</span><span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">カナシミ</span><span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">SORROW</span>
+
+                <!-- 哀 SADNESS -->
+                <button id="btn-sorrow" onclick="handlePress('sorrow')" 
+                    class="emotion-btn bg-blue-600 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M7.5 11h3"/><path d="M9 11v3"/><path d="M13.5 11h3"/><path d="M15 11v3"/>
+                        <path d="M9 18c1.5-1 4.5-1 6 0"/>
+                    </svg>
+                    <span class="text-2xl font-black mb-0.5 z-10">哀</span>
+                    <span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">カナシミ</span>
+                    <span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">SORROW</span>
                 </button>
-                <button id="btn-pleasure" onclick="handlePress('pleasure')" class="emotion-btn bg-green-500 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M8 14c0 0 1.5 3.5 4 3.5 2.5 0 4-3.5 4-3.5H8z"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
-                    <span class="text-2xl font-black mb-0.5 z-10">楽</span><span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">タノシミ</span><span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">PLEASURE</span>
+
+                <!-- 楽 PLEASURE -->
+                <button id="btn-pleasure" onclick="handlePress('pleasure')" 
+                    class="emotion-btn bg-green-500 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M8 14c0 0 1.5 3.5 4 3.5 2.5 0 4-3.5 4-3.5H8z"/>
+                        <line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>
+                    </svg>
+                    <span class="text-2xl font-black mb-0.5 z-10">楽</span>
+                    <span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">タノシミ</span>
+                    <span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">PLEASURE</span>
                 </button>
             </div>
         </main>
 
+        <!-- 集計エリア (タブ切り替え式) -->
         <section class="flex-none w-full max-w-md mx-auto bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 shadow-xl overflow-hidden mb-1 mt-2">
             <div class="flex text-xs font-bold text-center bg-gray-900/50">
                 <button onclick="switchTab('world_1h')" id="tab-world-1h" class="flex-1 py-2 tab-active transition-colors leading-tight">
@@ -271,54 +303,106 @@
             </div>
         </section>
 
-        <div id="share-buttons-area" class="flex-none w-full max-w-md mx-auto mb-2 px-2 flex flex-col gap-2">
-            <div class="flex gap-2 justify-center w-full">
-                <button onclick="shareTo('x')" class="flex-1 bg-black border border-gray-700 hover:bg-gray-900 text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span class="text-sm font-[Inter]">Post</span></button>
-                <button onclick="shareTo('line')" class="flex-1 bg-[#06C755] hover:bg-[#05b34c] text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5"><span class="text-sm font-[Inter]">LINE</span></button>
-                <button onclick="shareTo('threads')" class="flex-1 bg-[#1a1a1a] border border-gray-600 hover:bg-gray-800 text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5"><span class="text-sm font-[Inter]">Threads</span></button>
-            </div>
-            <div class="flex gap-2 justify-center w-full">
-                <button onclick="handleImageShare('instagram')" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5 shadow-md"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg><span class="text-sm font-[Inter]">Insta</span></button>
-                <button onclick="handleImageShare('tiktok')" class="flex-1 bg-[#111] border border-gray-700 hover:bg-black text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5 shadow-md"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg><span class="text-sm font-[Inter]">TikTok</span></button>
-            </div>
+        <!-- SNSシェア (集計パネルの下に移動) -->
+        <div class="flex-none w-full max-w-md mx-auto flex gap-2 justify-center mb-2 px-2">
+            <button onclick="shareTo('x')" class="flex-1 bg-black border border-gray-700 hover:bg-gray-900 text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <span class="text-sm font-[Inter]">Post</span>
+            </button>
+            <button onclick="shareTo('line')" class="flex-1 bg-[#06C755] hover:bg-[#05b34c] text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5">
+                <span class="text-sm font-[Inter]">LINE</span>
+            </button>
+            <button onclick="shareTo('threads')" class="flex-1 bg-[#1a1a1a] border border-gray-600 hover:bg-gray-800 text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5">
+                <span class="text-sm font-[Inter]">Threads</span>
+            </button>
         </div>
 
-        <!-- 棒人間エリア -->
+        <!-- 棒人間エリア (flex-growで残りのスペースを占有) -->
         <div class="flex-grow w-full max-w-md mx-auto flex items-end justify-center mb-0 px-4 relative min-h-[100px]">
-            <button onclick="generateAiMessage()" id="ai-btn" class="absolute bottom-2 right-2 bg-gray-800 border border-gray-600 rounded-full px-3 py-1.5 flex items-center gap-1 text-xs text-white hover:bg-gray-700 transition-colors z-20 shadow-sm"><span class="ai-sparkle">✨</span>言葉をもらう</button>
+            <!-- AIメッセージ生成ボタン (位置: bottom-2) -->
+            <button onclick="generateAiMessage()" id="ai-btn" class="absolute bottom-2 right-2 bg-gray-800 border border-gray-600 rounded-full px-3 py-1.5 flex items-center gap-1 text-xs text-white hover:bg-gray-700 transition-colors z-20 shadow-sm">
+                <span class="ai-sparkle">✨</span>言葉をもらう
+            </button>
+
+            <!-- 感情オーラ（パーティクル）コンテナ -->
             <div id="particles-container" class="absolute inset-0 pointer-events-none z-0"></div>
+
+            <!-- 棒人間SVG (歩くアニメーション用コンテナ内、relativeを追加して吹き出しの親に) -->
             <div class="walker-container z-10 relative">
-                <!-- クラス: bubble-base を使用 -->
-                <div id="bubble-container" class="bubble-base"><span id="stick-message">Touch my heart...</span></div>
+                
+                <!-- 吹き出し (walker-containerの中に移動) -->
+                <!-- クラス: bubble-tail を追加してCSSで制御 -->
+                <div id="bubble-container" class="absolute bg-white text-black px-4 py-2 rounded-xl text-sm font-bold shadow-lg bubble-pop bubble-tail z-20 max-w-[150px] break-words leading-tight" style="display:none; width: max-content;">
+                    <span id="stick-message">Touch my heart...</span>
+                </div>
+
                 <svg id="stick-figure" width="40" height="40" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="mb-1">
                     <line x1="50" y1="50" x2="50" y2="80" />
                     <line id="leg-left" x1="50" y1="80" x2="30" y2="100" class="leg-left-anim" />
                     <line id="leg-right" x1="50" y1="80" x2="70" y2="100" class="leg-right-anim" />
                     <circle cx="50" cy="30" r="20" />
-                    <g id="face-content"><circle cx="43" cy="25" r="2" fill="white" stroke="none"/><circle cx="57" cy="25" r="2" fill="white" stroke="none"/><path d="M45 35 Q50 38 55 35" /></g>
-                    <g id="arms"><line x1="50" y1="60" x2="30" y2="70" /><line x1="50" y1="60" x2="70" y2="70" /></g>
+                    <g id="face-content">
+                        <circle cx="43" cy="25" r="2" fill="white" stroke="none"/>
+                        <circle cx="57" cy="25" r="2" fill="white" stroke="none"/>
+                        <path d="M45 35 Q50 38 55 35" />
+                    </g>
+                    <g id="arms">
+                        <line x1="50" y1="60" x2="30" y2="70" />
+                        <line x1="50" y1="60" x2="70" y2="70" />
+                    </g>
                 </svg>
             </div>
         </div>
 
+        <!-- フッター（SNS以外） -->
         <footer class="flex-none w-full max-w-md mx-auto flex gap-2 justify-center mb-0"></footer>
 
-    </div>
+    </div><!-- End of Main Wrapper -->
 
-    <!-- 地層エリア -->
+    <!-- 地層エリア (広告 & コンテンツ) -->
     <div class="stratum-container flex-none w-full max-w-md mx-auto">
         <div class="ground-line"></div>
-        <div class="stratum-layer ad-layer layer-1">広告募集中 (AD 1)</div>
-        <div class="stratum-layer ad-layer layer-2">広告募集中 (AD 2)</div>
+        
+        <!-- 広告枠（浅い層） -->
+        <div class="stratum-layer ad-layer layer-1">
+            広告募集中 (AD 1)
+        </div>
+        <div class="stratum-layer ad-layer layer-2">
+            広告募集中 (AD 2)
+        </div>
+
+        <!-- コンテンツ地層（深い層） -->
         <div class="layer-content">
              <h3>📜 EMOTHI 開発ストーリー</h3>
-             <p>このアプリは、「誰にも言えない感情を、空に向かって放り投げたい」という小さな願いから生まれました。嬉しいこと、腹が立つこと、悲しいこと。SNSに書くほどでもないけれど、誰かに知ってほしい気持ち。そんな感情を「スイッチ」として可視化し、世界中の誰かと「今、同じ感情を持っている」という繋がりを感じられたら、少しだけ救われるかもしれない。</p>
-             <p>キャラクターの「エモッチ」は、そんなあなたの感情の番人です。彼は言葉を持ちませんが（AIの力で少し喋りますが）、あなたの感情に合わせて表情を変え、時には一緒に喜び、時には悲しんでくれます。</p>
-             <p><strong>開発コンセプト:</strong> 「人を気にかけるきっかけになるツール」。自分の感情を見つめ直すだけでなく、世界のどこかで誰かが泣いていること、笑っていることに思いを馳せる時間を、この小さな画面の中で過ごしていただければ幸いです。</p>
+             <p>
+                 このアプリは、「誰にも言えない感情を、空に向かって放り投げたい」という小さな願いから生まれました。
+                 嬉しいこと、腹が立つこと、悲しいこと。SNSに書くほどでもないけれど、誰かに知ってほしい気持ち。
+                 そんな感情を「スイッチ」として可視化し、世界中の誰かと「今、同じ感情を持っている」という繋がりを感じられたら、少しだけ救われるかもしれない。
+             </p>
+             <p>
+                 キャラクターの「エモッチ」は、そんなあなたの感情の番人です。
+                 彼は言葉を持ちませんが（AIの力で少し喋りますが）、あなたの感情に合わせて表情を変え、時には一緒に喜び、時には悲しんでくれます。
+             </p>
+             <p>
+                 <strong>開発コンセプト:</strong> 「人を気にかけるきっかけになるツール」。
+                 自分の感情を見つめ直すだけでなく、世界のどこかで誰かが泣いていること、笑っていることに思いを馳せる時間を、この小さな画面の中で過ごしていただければ幸いです。
+             </p>
+
              <h3>💡 エモッチの使い方</h3>
-             <p>1. <strong>感情ボタンを押す:</strong> 今の気持ちに近いボタンを押してください。<br>2. <strong>エモッチの変化:</strong> あなたの感情に合わせてエモッチが動いたり、言葉をかけてくれます。<br>3. <strong>世界とつながる:</strong> 「せかい」タブで、今この瞬間に世界中で押された感情が見えます。<br>4. <strong>シェアする:</strong> SNSで今の感情バランスをシェアできます。エモッチの言葉も一緒に投稿されます。</p>
+             <p>
+                 1. <strong>感情ボタンを押す:</strong> 今の気持ちに近いボタンを押してください。<br>
+                 2. <strong>エモッチの変化:</strong> あなたの感情に合わせてエモッチが動いたり、言葉をかけてくれます。<br>
+                 3. <strong>世界とつながる:</strong> 「せかい」タブで、今この瞬間に世界中で押された感情が見えます。<br>
+                 4. <strong>シェアする:</strong> SNSで今の感情バランスをシェアできます。エモッチの言葉も一緒に投稿されます。
+             </p>
+
              <h3>🧠 感情についてのコラム</h3>
-             <p>「喜怒哀楽」という言葉がありますが、人間の感情はもっと複雑です。「怒り」の裏には「悲しみ」が隠れていることもありますし、「楽」の中に「虚しさ」があることもあります。EMOTHIではあえて4つのシンプルな感情に絞っていますが、ボタンを連打することでその「強さ」や「混ざり具合」を表現してみてください。言葉にならないモヤモヤを、指先から外に逃がしてあげる。それだけで、心のデトックスになるかもしれません。</p>
+             <p>
+                 「喜怒哀楽」という言葉がありますが、人間の感情はもっと複雑です。
+                 「怒り」の裏には「悲しみ」が隠れていることもありますし、「楽」の中に「虚しさ」があることもあります。
+                 EMOTHIではあえて4つのシンプルな感情に絞っていますが、ボタンを連打することでその「強さ」や「混ざり具合」を表現してみてください。
+                 言葉にならないモヤモヤを、指先から外に逃がしてあげる。それだけで、心のデトックスになるかもしれません。
+             </p>
         </div>
     </div>
 
@@ -424,6 +508,22 @@
         };
 
         const iconColors = { joy: '#FFD700', anger: '#dc2626', sorrow: '#2563eb', pleasure: '#22c55e' };
+        
+        // --- 4. 月ごとのメッセージ定義 ---
+        const monthlyMessages = {
+            1: ["あけおめ！", "お餅たべた？", "コタツ最高...", "今年こそは！", "まだ正月気分"],
+            2: ["チョコほしいな", "鬼は外！", "寒いね～", "春はまだ？", "豆まきした？"],
+            3: ["花粉が...", "卒業シーズン", "桜咲くかな", "暖かくなってきた", "別れと出会い"],
+            4: ["新生活だね", "嘘ついていい？", "桜きれい", "お花見したい", "新しいこと始めよ"],
+            5: ["GW何する？", "五月病？", "柏餅たべたい", "緑がきれい", "休み明けツライ"],
+            6: ["雨ばっかり...", "カエルいた", "紫陽花きれい", "祝日欲しい...", "湿気がすごい"],
+            7: ["七夕だね", "暑すぎ...", "海行きたい", "アイス食べよ", "短冊書いた？"],
+            8: ["夏休み！", "宿題終わった？", "セミうるさい", "花火見たい", "プール行こ"],
+            9: ["お月見しよう", "台風気をつけて", "秋刀魚たべたい", "涼しくなった？", "夜が長くなるね"],
+            10: ["トリックオアトリート！", "お菓子くれなきゃ...", "運動会？", "読書の秋", "カボチャおいしい"],
+            11: ["紅葉見に行こ", "ポッキー食べる？", "冬の気配...", "勤労感謝！", "焼き芋たべたい"],
+            12: ["メリークリスマス！", "大掃除しなきゃ", "良いお年を", "今年もお疲れ！", "紅白見る？"]
+        };
 
         const stickMessages = {
             joy: ["ウキウキだね！", "いいことあった？", "世界が輝いてる！", "その調子！", "踊りだしたい気分♪", "最高！", "全能感ある？", "君の笑顔が見えるよ", "今日は記念日？", "世界平和、達成！", "銀河征服できそう", "宝くじ買う？", "キテるねえ〜！", "ハッピーオーラ全開！", "神様も味方しそう", "拍手喝采！", "スキップしたい気分？", "人生イージーモード！", "輝いてるね！", "優勝！", "その光、誰かに分けてあげて", "君の笑顔が誰かを救うよ", "すごいぞ！エライゾー！", "ニコニコでエライゾー！"],
@@ -570,7 +670,15 @@
             const bubble = document.getElementById('bubble-container');
             const msgSpan = document.getElementById('stick-message');
             
-            const list = stickMessages[currentDisplayEmotion] || stickMessages['neutral'];
+            // メッセージリスト選択 (季節ネタを混ぜる)
+            let list = stickMessages[currentDisplayEmotion] || stickMessages['neutral'];
+            
+            if (['neutral', 'joy', 'pleasure'].includes(currentDisplayEmotion)) {
+                 const currentMonth = new Date().getMonth() + 1;
+                 const seasonalMsgs = monthlyMessages[currentMonth] || [];
+                 list = list.concat(seasonalMsgs);
+            }
+
             const msg = list[Math.floor(Math.random() * list.length)];
             
             updateBubble(bubble, msgSpan, msg, Math.random() > 0.5);
@@ -682,15 +790,14 @@
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${keyToUse}`;
             
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
-            for (let i = 0; i < 3; i++) { // リトライ回数を3回に減らす
+            for (let i = 0; i < 5; i++) { // リトライ回数を5回に戻す
                 try {
                     const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
                     const data = await response.json();
                     return data.candidates?.[0]?.content?.parts?.[0]?.text || "何かを感じるよ...";
                 } catch (e) { 
-                    // 待機時間を短縮: 0.5s, 1s, 1.5s
-                    await new Promise(r => setTimeout(r, 500 * (i + 1))); 
+                    await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i))); 
                 }
             }
             throw new Error("Failed after retries");
