@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EMOTHI</title>
+    <meta name="description" content="感情×スイッチ＝エモッチ。今の気持ちを世界と共有しよう。">
+    <meta property="og:url" content="https://negurabeat.github.io/emothi-app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="EMOTHI (エモッチ)" />
+    <meta property="og:description" content="今の感情をスイッチで送信。世界中の「今」の感情が見えるアプリ。" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -72,22 +77,24 @@
         .animate-sorrow::after { animation: wave-sorrow 0.5s ease-out !important; }
         .animate-pleasure::after { animation: wave-pleasure 0.5s ease-out !important; }
 
-        /* フラッシュ (世界用) */
-        @keyframes flash-world-joy { 0% { box-shadow: 0 0 12px #FFD700; background-color: #ffeeb0; transform: scale(0.98); } 100% { box-shadow: none; background-color: #FFD700; transform: scale(1); } }
-        @keyframes flash-world-anger { 0% { box-shadow: 0 0 12px #FF4500; background-color: #ffcccb; transform: scale(0.98); } 100% { box-shadow: none; background-color: #dc2626; transform: scale(1); } }
-        @keyframes flash-world-sorrow { 0% { box-shadow: 0 0 12px #4169E1; background-color: #daeaff; transform: scale(0.98); } 100% { box-shadow: none; background-color: #2563eb; transform: scale(1); } }
-        @keyframes flash-world-pleasure { 0% { box-shadow: 0 0 12px #32CD32; background-color: #d1fae5; transform: scale(0.98); } 100% { box-shadow: none; background-color: #22c55e; transform: scale(1); } }
+        .emotion-btn {
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: visible !important;
+        }
 
-        .animate-world-joy { animation: flash-world-joy 0.4s ease-out; }
-        .animate-world-anger { animation: flash-world-anger 0.4s ease-out; }
-        .animate-world-sorrow { animation: flash-world-sorrow 0.4s ease-out; }
-        .animate-world-pleasure { animation: flash-world-pleasure 0.4s ease-out; }
+        /* タブのアクティブスタイル */
+        .tab-active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-bottom: 2px solid #fff;
+        }
+        .tab-inactive {
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+        }
 
-        /* タブ */
-        .tab-active { background-color: rgba(255, 255, 255, 0.1); color: #fff; border-bottom: 2px solid #fff; }
-        .tab-inactive { color: #6b7280; border-bottom: 2px solid transparent; }
-
-        /* --- 吹き出しスタイル（修正版: 横長・安定型） --- */
+        /* --- 吹き出しスタイル --- */
         .bubble-base {
             position: absolute;
             background-color: white;
@@ -417,6 +424,7 @@
         };
 
         const iconColors = { joy: '#FFD700', anger: '#dc2626', sorrow: '#2563eb', pleasure: '#22c55e' };
+
         const stickMessages = {
             joy: ["ウキウキだね！", "いいことあった？", "世界が輝いてる！", "その調子！", "踊りだしたい気分♪", "最高！", "全能感ある？", "君の笑顔が見えるよ", "今日は記念日？", "世界平和、達成！", "銀河征服できそう", "宝くじ買う？", "キテるねえ〜！", "ハッピーオーラ全開！", "神様も味方しそう", "拍手喝采！", "スキップしたい気分？", "人生イージーモード！", "輝いてるね！", "優勝！", "その光、誰かに分けてあげて", "君の笑顔が誰かを救うよ", "すごいぞ！エライゾー！", "ニコニコでエライゾー！"],
             anger: ["深呼吸しよう...", "カルシウム足りてる？", "壁殴らないでね", "沸騰中！", "落ち着いて...", "誰にやられた？", "サンドバッグになるよ？", "呪いはNGだよ", "名前教えて？（嘘）", "地団駄踏んじゃえ", "デコピンしとく？", "怒りはエネルギーだ！", "壁ドン（壁が痛いよ）", "ブラックリスト登録…", "がおー！って感じ？", "ストレス爆発寸前？", "お茶でも飲もうよ", "復讐は何も生まない…", "叫んじゃう？", "プンプンだね", "吐き出して楽になろう", "ボクが話聞くよ", "我慢しててエライゾー"],
@@ -672,14 +680,18 @@
         async function callGemini(prompt) {
             const keyToUse = (typeof __firebase_config !== 'undefined') ? "" : apiKey;
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${keyToUse}`;
+            
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 3; i++) { // リトライ回数を3回に減らす
                 try {
                     const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
                     const data = await response.json();
                     return data.candidates?.[0]?.content?.parts?.[0]?.text || "何かを感じるよ...";
-                } catch (e) { await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i))); }
+                } catch (e) { 
+                    // 待機時間を短縮: 0.5s, 1s, 1.5s
+                    await new Promise(r => setTimeout(r, 500 * (i + 1))); 
+                }
             }
             throw new Error("Failed after retries");
         }
