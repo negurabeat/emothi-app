@@ -137,11 +137,11 @@
             right: 20px; 
             bottom: 50px;
             transform-origin: bottom right;
-            border-bottom-right-radius: 4px;
+            border-bottom-right-radius: 4px; /* 角を少し鋭く */
         }
         .bubble-left::after {
             right: 12px;
-            border-width: 12px 10px 0 0;
+            border-width: 12px 10px 0 0; /* 右上が直角に近い形 */
             border-color: white transparent transparent transparent;
         }
 
@@ -170,43 +170,151 @@
         .ai-sparkle { animation: sparkle 2s infinite; }
         @keyframes sparkle { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px #fff); } 50% { opacity: 0.7; filter: drop-shadow(0 0 8px #a855f7); } }
         
-        /* 広告・地層 */
-        .stratum-container { width: 100%; max-width: 320px; margin: 0 auto; display: flex; flex-direction: column; }
-        .stratum-layer { width: 100%; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; transition: background-color 0.2s; cursor: pointer; }
-        .layer-1 { background-color: #292524; border: 1px dashed #44403c; border-bottom: none; color: #a8a29e; border-radius: 4px 4px 0 0; }
-        .layer-1:hover { background-color: #363230; }
-        .layer-2 { background-color: #1c1917; border: 1px dashed #292524; color: #78716c; }
-        .layer-2:hover { background-color: #262220; }
-        .layer-content { background-color: #0c0a09; border-left: 1px solid #1c1917; border-right: 1px solid #1c1917; border-bottom: 1px solid #1c1917; color: #d6d3d1; padding: 24px; font-size: 14px; line-height: 1.8; text-align: left; border-radius: 0 0 4px 4px; }
-        .layer-content h3 { color: #f5f5f4; font-weight: bold; font-size: 16px; margin-top: 16px; margin-bottom: 10px; border-bottom: 1px solid #44403c; padding-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-        .layer-content p { margin-bottom: 16px; }
-        .layer-content strong { color: #ffffff; }
-        .ground-line { width: 80%; height: 2px; background-color: #44403c; margin: 0 auto 2px auto; border-radius: 2px; opacity: 0.5; }
+        /* 広告スペース（地層風） */
+        .stratum-container {
+            width: 100%;
+            /* max-width: 320px; を削除して親要素(max-w-md)に合わせる */
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stratum-layer {
+            width: 100%;
+            height: 40px; /* 各枠の高さ */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px; /* 10px -> 12px */
+            font-weight: bold;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
 
-        /* アニメーション */
-        .leg-left-anim { animation: leg-swing 1s infinite alternate ease-in-out; transform-origin: 50px 80px; }
-        .leg-right-anim { animation: leg-swing 1s infinite alternate-reverse ease-in-out; transform-origin: 50px 80px; }
-        @keyframes leg-swing { from { transform: rotate(-15deg); } to { transform: rotate(15deg); } }
-        .walker-container { width: 40px; animation: wander 10s infinite ease-in-out; }
-        @keyframes wander { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(20px); } 70% { transform: translateX(-20px); } }
-        .particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; opacity: 0.6; pointer-events: none; animation: floatUp 3s linear infinite; }
-        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0.6; } 100% { transform: translateY(-40px) scale(0); opacity: 0; } }
+        /* 1層目（浅い層） */
+        .layer-1 {
+            background-color: #292524; /* stone-800 */
+            border: 1px dashed #44403c;
+            border-bottom: none;
+            color: #a8a29e;
+            border-radius: 4px 4px 0 0;
+        }
+        .layer-1:hover { background-color: #363230; }
+
+        /* 2層目（深い層） */
+        .layer-2 {
+            background-color: #1c1917; /* stone-900 */
+            border: 1px dashed #292524;
+            color: #78716c;
+        }
+        .layer-2:hover { background-color: #262220; }
+        
+        /* コンテンツ地層（さらに深い層） */
+        .layer-content {
+            background-color: #0c0a09; /* stone-950 */
+            border-left: 1px solid #1c1917;
+            border-right: 1px solid #1c1917;
+            border-bottom: 1px solid #1c1917;
+            color: #d6d3d1; 
+            padding: 24px;
+            font-size: 14px; /* 13px -> 14px */
+            line-height: 1.8;
+            text-align: left;
+            border-radius: 0 0 4px 4px;
+        }
+        
+        .layer-content h3 {
+            color: #f5f5f4;
+            font-weight: bold;
+            font-size: 16px; /* 15px -> 16px */
+            margin-top: 16px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #44403c;
+            padding-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .layer-content p {
+            margin-bottom: 16px;
+        }
+        
+        .layer-content strong {
+            color: #ffffff;
+        }
+
+        /* 地面ライン */
+        .ground-line {
+            width: 80%;
+            height: 2px;
+            background-color: #44403c;
+            margin: 0 auto 2px auto;
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+
+        /* --- 棒人間の歩行アニメーション --- */
+        @keyframes walk-body {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(5px) rotate(2deg); }
+            75% { transform: translateX(-5px) rotate(-2deg); }
+        }
+        /* SVG内の足用クラス */
+        .leg-left-anim {
+            animation: leg-swing 1s infinite alternate ease-in-out;
+            transform-origin: 50px 80px; /* 股関節 */
+        }
+        .leg-right-anim {
+            animation: leg-swing 1s infinite alternate-reverse ease-in-out;
+            transform-origin: 50px 80px;
+        }
+        @keyframes leg-swing {
+            from { transform: rotate(-15deg); }
+            to { transform: rotate(15deg); }
+        }
+        
+        /* 全体が左右に歩くコンテナ */
+        .walker-container {
+            width: 40px; /* 基準幅を固定して吹き出しの位置計算を安定させる */
+            animation: wander 10s infinite ease-in-out;
+        }
+        @keyframes wander {
+            0%, 100% { transform: translateX(0); }
+            30% { transform: translateX(20px); }
+            70% { transform: translateX(-20px); }
+        }
+
+        /* --- 感情オーラ（パーティクル） --- */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: floatUp 3s linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0.6; }
+            100% { transform: translateY(-40px) scale(0); opacity: 0; }
+        }
 
         #share-modal { transition: opacity 0.3s ease; }
     </style>
 </head>
 <body class="px-1 py-2 safe-area-pb">
 
-    <!-- メインコンテンツラッパー: 画面高さから広告1.5層分(60px)を引いた高さを確保 -->
-    <div class="flex flex-col justify-between min-h-[calc(100dvh-60px)]">
+    <!-- メインコンテンツラッパー -->
+    <div id="capture-area" class="flex flex-col justify-between min-h-[calc(100dvh-60px)] bg-[#121212]">
 
-        <!-- ヘッダー (極小) -->
+        <!-- ヘッダー -->
         <header class="flex-none w-full max-w-md mx-auto flex justify-between items-center mb-0.5">
             <div class="flex flex-col">
                 <h1 class="text-xl font-bold tracking-wider text-gray-300 font-[Inter] leading-none">EMOTHI</h1>
                 <span class="text-xs text-gray-500 tracking-wider font-bold mt-0.5">エモッチ</span>
             </div>
-            <div class="text-xs text-gray-500 border border-gray-700 px-2 py-0.5 rounded-full flex items-center">
+            <div id="header-status" class="text-xs text-gray-500 border border-gray-700 px-2 py-0.5 rounded-full flex items-center">
                 <span id="connection-status" class="w-2 h-2 inline-block bg-yellow-500 rounded-full mr-1.5"></span>
                 <span id="connection-text" class="font-[Inter]">CONNECTING</span>
             </div>
@@ -221,57 +329,26 @@
         <!-- メインスイッチエリア -->
         <main class="flex-none flex items-center justify-center w-full max-w-md mx-auto py-1">
             <div class="grid grid-cols-2 gap-1.5 w-full aspect-square max-h-[30vh]">
-                <!-- 喜 JOY -->
-                <button id="btn-joy" onclick="handlePress('joy')" 
-                    class="emotion-btn bg-[#FFD700] text-black rounded-2xl shadow-md group flex flex-col items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform">
-                        <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>
-                    </svg>
-                    <span class="text-2xl font-black mb-0.5 z-10">喜</span>
-                    <span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">ヨロコビ</span>
-                    <span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">JOY</span>
+                <button id="btn-joy" onclick="handlePress('joy')" class="emotion-btn bg-[#FFD700] text-black rounded-2xl shadow-md group flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                    <span class="text-2xl font-black mb-0.5 z-10">喜</span><span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">ヨロコビ</span><span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">JOY</span>
                 </button>
-
-                <!-- 怒 ANGER -->
-                <button id="btn-anger" onclick="handlePress('anger')" 
-                    class="emotion-btn bg-red-600 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform">
-                        <circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>
-                    </svg>
-                    <span class="text-2xl font-black mb-0.5 z-10">怒</span>
-                    <span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">イカリ</span>
-                    <span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">ANGER</span>
+                <button id="btn-anger" onclick="handlePress('anger')" class="emotion-btn bg-red-600 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                    <span class="text-2xl font-black mb-0.5 z-10">怒</span><span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">イカリ</span><span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">ANGER</span>
                 </button>
-
-                <!-- 哀 SADNESS -->
-                <button id="btn-sorrow" onclick="handlePress('sorrow')" 
-                    class="emotion-btn bg-blue-600 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M7.5 11h3"/><path d="M9 11v3"/><path d="M13.5 11h3"/><path d="M15 11v3"/>
-                        <path d="M9 18c1.5-1 4.5-1 6 0"/>
-                    </svg>
-                    <span class="text-2xl font-black mb-0.5 z-10">哀</span>
-                    <span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">カナシミ</span>
-                    <span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">SORROW</span>
+                <button id="btn-sorrow" onclick="handlePress('sorrow')" class="emotion-btn bg-blue-600 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M7.5 11h3"/><path d="M9 11v3"/><path d="M13.5 11h3"/><path d="M15 11v3"/><path d="M9 18c1.5-1 4.5-1 6 0"/></svg>
+                    <span class="text-2xl font-black mb-0.5 z-10">哀</span><span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">カナシミ</span><span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">SORROW</span>
                 </button>
-
-                <!-- 楽 PLEASURE -->
-                <button id="btn-pleasure" onclick="handlePress('pleasure')" 
-                    class="emotion-btn bg-green-500 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M8 14c0 0 1.5 3.5 4 3.5 2.5 0 4-3.5 4-3.5H8z"/>
-                        <line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>
-                    </svg>
-                    <span class="text-2xl font-black mb-0.5 z-10">楽</span>
-                    <span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">タノシミ</span>
-                    <span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">PLEASURE</span>
+                <button id="btn-pleasure" onclick="handlePress('pleasure')" class="emotion-btn bg-green-500 text-white rounded-2xl shadow-md group flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-0.5 opacity-80 group-hover:scale-105 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M8 14c0 0 1.5 3.5 4 3.5 2.5 0 4-3.5 4-3.5H8z"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                    <span class="text-2xl font-black mb-0.5 z-10">楽</span><span class="text-[10px] font-bold opacity-60 leading-none mb-0.5">タノシミ</span><span class="text-[10px] font-bold tracking-widest font-[Inter] opacity-70 leading-none">PLEASURE</span>
                 </button>
             </div>
         </main>
 
-        <!-- 集計エリア (タブ切り替え式) -->
+        <!-- 集計エリア -->
         <section class="flex-none w-full max-w-md mx-auto bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 shadow-xl overflow-hidden mb-1 mt-2">
             <div class="flex text-xs font-bold text-center bg-gray-900/50">
                 <button onclick="switchTab('world_1h')" id="tab-world-1h" class="flex-1 py-2 tab-active transition-colors leading-tight">
@@ -335,12 +412,11 @@
                 
                 <!-- 吹き出し (walker-containerの中に移動) -->
                 <!-- クラス: bubble-tail を追加してCSSで制御 -->
-                <div id="bubble-container" class="absolute bg-white text-black px-4 py-2 rounded-xl text-sm font-bold shadow-lg bubble-pop bubble-tail z-20 max-w-[150px] break-words leading-tight" style="display:none; width: max-content;">
-                    <span id="stick-message">Touch my heart...</span>
-                </div>
+                <div id="bubble-container" class="bubble-base"><span id="stick-message">Touch my heart...</span></div>
 
                 <svg id="stick-figure" width="40" height="40" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="mb-1">
                     <line x1="50" y1="50" x2="50" y2="80" />
+                    <!-- 足 (アニメーション用に分離) -->
                     <line id="leg-left" x1="50" y1="80" x2="30" y2="100" class="leg-left-anim" />
                     <line id="leg-right" x1="50" y1="80" x2="70" y2="100" class="leg-right-anim" />
                     <circle cx="50" cy="30" r="20" />
@@ -357,6 +433,7 @@
             </div>
         </div>
 
+        <!-- フッター（SNS以外） -->
         <footer class="flex-none w-full max-w-md mx-auto flex gap-2 justify-center mb-0"></footer>
 
     </div><!-- End of Main Wrapper -->
@@ -645,7 +722,7 @@
             const isSpam = document.body.dataset.spamming === 'true';
 
             if (document.getElementById('ai-btn').disabled) return;
-            if (now - lastAiMessageTime < 10000) return;
+            if (now - lastAiMessageTime < 15000) return; // 15秒間維持
 
             const stats = processPersonalStats('1h');
             let nextEmotion = isSpam ? 'spam' : weightedRandom(stats);
@@ -790,7 +867,6 @@
         async function callGemini(prompt) {
             const keyToUse = (typeof __firebase_config !== 'undefined') ? "" : apiKey;
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${keyToUse}`;
-            
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
             for (let i = 0; i < 5; i++) { // リトライ回数を5回に戻す
                 try {
