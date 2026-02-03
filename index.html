@@ -72,42 +72,45 @@
         .animate-sorrow::after { animation: wave-sorrow 0.5s ease-out !important; }
         .animate-pleasure::after { animation: wave-pleasure 0.5s ease-out !important; }
 
-        .emotion-btn {
-            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: visible !important;
-        }
+        /* フラッシュ (世界用) */
+        @keyframes flash-world-joy { 0% { box-shadow: 0 0 12px #FFD700; background-color: #ffeeb0; transform: scale(0.98); } 100% { box-shadow: none; background-color: #FFD700; transform: scale(1); } }
+        @keyframes flash-world-anger { 0% { box-shadow: 0 0 12px #FF4500; background-color: #ffcccb; transform: scale(0.98); } 100% { box-shadow: none; background-color: #dc2626; transform: scale(1); } }
+        @keyframes flash-world-sorrow { 0% { box-shadow: 0 0 12px #4169E1; background-color: #daeaff; transform: scale(0.98); } 100% { box-shadow: none; background-color: #2563eb; transform: scale(1); } }
+        @keyframes flash-world-pleasure { 0% { box-shadow: 0 0 12px #32CD32; background-color: #d1fae5; transform: scale(0.98); } 100% { box-shadow: none; background-color: #22c55e; transform: scale(1); } }
 
-        /* タブのアクティブスタイル */
-        .tab-active {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border-bottom: 2px solid #fff;
-        }
-        .tab-inactive {
-            color: #6b7280;
-            border-bottom: 2px solid transparent;
-        }
+        .animate-world-joy { animation: flash-world-joy 0.4s ease-out; }
+        .animate-world-anger { animation: flash-world-anger 0.4s ease-out; }
+        .animate-world-sorrow { animation: flash-world-sorrow 0.4s ease-out; }
+        .animate-world-pleasure { animation: flash-world-pleasure 0.4s ease-out; }
 
-        /* --- 吹き出しスタイル（修正版） --- */
+        /* タブ */
+        .tab-active { background-color: rgba(255, 255, 255, 0.1); color: #fff; border-bottom: 2px solid #fff; }
+        .tab-inactive { color: #6b7280; border-bottom: 2px solid transparent; }
+
+        /* --- 吹き出しスタイル（修正版: 横長・安定型） --- */
         .bubble-base {
             position: absolute;
             background-color: white;
             color: black;
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 12px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             z-index: 20;
-            max-width: 220px; /* 幅を広げる (140px -> 220px) */
-            width: max-content; /* 中身に合わせる */
+            width: max-content;
+            max-width: 240px;   
+            min-width: 80px;    
             line-height: 1.4;
+            text-align: center;
             opacity: 0; 
             pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
         .bubble-visible {
+            opacity: 1;
+            transform: scale(1);
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
@@ -117,39 +120,39 @@
         .bubble-tail::after {
             content: '';
             position: absolute;
-            bottom: -8px; /* 本体から少し突き出す */
+            bottom: -8px; 
             width: 0;
             height: 0;
             border-style: solid;
         }
 
-        /* 左側配置（エモッチの左） */
+        /* 左側配置 */
         .bubble-left {
-            right: 20px; /* 親の右端から20px */
-            bottom: 45px;
+            right: 20px; 
+            bottom: 50px;
             transform-origin: bottom right;
-            border-bottom-right-radius: 4px; /* 角を少し鋭く */
+            border-bottom-right-radius: 2px;
         }
         .bubble-left::after {
             right: 12px;
-            border-width: 10px 8px 0 0; /* 右上が直角に近い形 */
+            border-width: 12px 10px 0 0;
             border-color: white transparent transparent transparent;
         }
 
-        /* 右側配置（エモッチの右） */
+        /* 右側配置 */
         .bubble-right {
-            left: 20px; /* 親の左端から20px */
-            bottom: 45px;
+            left: 20px;
+            bottom: 50px;
             transform-origin: bottom left;
-            border-bottom-left-radius: 4px;
+            border-bottom-left-radius: 2px;
         }
         .bubble-right::after {
             left: 12px;
-            border-width: 10px 0 0 8px; /* 左上が直角に近い形 */
+            border-width: 12px 0 0 10px;
             border-color: white transparent transparent transparent;
         }
 
-        /* AIモードの色 (しっぽも含む) */
+        /* AIモード */
         .bubble-ai { background-color: #f3e8ff; color: #4c1d95; }
         .bubble-ai.bubble-left::after { border-color: #f3e8ff transparent transparent transparent; }
         .bubble-ai.bubble-right::after { border-color: #f3e8ff transparent transparent transparent; }
@@ -228,7 +231,6 @@
             </div>
         </main>
 
-        <!-- 集計エリア -->
         <section class="flex-none w-full max-w-md mx-auto bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 shadow-xl overflow-hidden mb-1 mt-2">
             <div class="flex text-xs font-bold text-center bg-gray-900/50">
                 <button onclick="switchTab('world_1h')" id="tab-world-1h" class="flex-1 py-2 tab-active transition-colors leading-tight">
@@ -262,7 +264,6 @@
             </div>
         </section>
 
-        <!-- SNSシェア -->
         <div id="share-buttons-area" class="flex-none w-full max-w-md mx-auto mb-2 px-2 flex flex-col gap-2">
             <div class="flex gap-2 justify-center w-full">
                 <button onclick="shareTo('x')" class="flex-1 bg-black border border-gray-700 hover:bg-gray-900 text-white py-2.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span class="text-sm font-[Inter]">Post</span></button>
@@ -314,16 +315,25 @@
         </div>
     </div>
 
-    <!-- 画像保存用モーダル -->
+    <!-- 画像保存用モーダル (中断ボタンのスタイル変更) -->
     <div id="share-modal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 max-w-sm w-full mx-4 shadow-2xl flex flex-col items-center">
-            <h3 class="text-white font-bold mb-3">画像として保存してシェア</h3>
+        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 max-w-sm w-full mx-4 shadow-2xl flex flex-col items-center relative">
+            
+            <!-- 右上バツボタン -->
+            <button onclick="closeShareModal()" class="absolute top-2 right-2 text-gray-400 hover:text-white p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <h3 class="text-white font-bold mb-3 mt-1">画像として保存してシェア</h3>
             <div id="generated-image-container" class="mb-4 border border-gray-600 rounded overflow-hidden w-full bg-black flex justify-center">
                 <p class="text-gray-500 py-8">生成中...</p>
             </div>
             <p class="text-xs text-gray-400 mb-4 text-center">画像を長押しして保存し、<br>アプリを開いて投稿してください。</p>
             <div class="flex gap-2 w-full">
-                <button onclick="closeShareModal()" class="flex-1 py-2 rounded-lg bg-gray-700 text-white text-xs font-bold hover:bg-gray-600 transition-colors">閉じる</button>
+                <!-- 中断ボタン (ゴーストボタン) -->
+                <button onclick="closeShareModal()" class="flex-1 py-2 rounded-lg border border-gray-500 text-gray-300 text-xs font-bold hover:bg-gray-700 transition-colors">中断</button>
                 <a id="share-app-link" href="#" target="_blank" class="flex-1 py-2 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-colors text-center flex items-center justify-center">アプリを開く</a>
             </div>
         </div>
@@ -557,8 +567,9 @@
             
             updateBubble(bubble, msgSpan, msg, Math.random() > 0.5);
 
-            if (stats.total === 0 && bubble.style.display === 'none') {
-                 bubble.style.display = 'block';
+            if (stats.total === 0 && bubble.style.opacity === '0') {
+                 bubble.style.opacity = '1';
+                 bubble.classList.add('bubble-visible');
             }
         };
 
@@ -661,7 +672,6 @@
         async function callGemini(prompt) {
             const keyToUse = (typeof __firebase_config !== 'undefined') ? "" : apiKey;
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${keyToUse}`;
-            
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
             for (let i = 0; i < 5; i++) {
                 try {
@@ -722,6 +732,7 @@
             }
         };
         
+        // 画像シェア用の関数
         window.handleImageShare = async (platform) => {
             const captureArea = document.getElementById('capture-area');
             const modal = document.getElementById('share-modal');
